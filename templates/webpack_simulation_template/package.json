@@ -1,0 +1,21 @@
+{
+  "name": "webpack-simulation-template",
+  "version": "1.0.0",
+  "description": "Simulation description here.",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve --open --config ./_dev/webpack.config.js --mode=development",
+    "build": "webpack --config ./_dev/webpack.config.js --mode=production",
+    "install-dependencies": "npm install --save bootstrap clean-webpack-plugin css-loader file-loader html-loader html-webpack-plugin mini-css-extract-plugin p5 postcss-loader sass sass-loader style-loader terser-webpack-plugin to-string-loader uglify-js webpack webpack-cli webpack-dev-server"
+  },
+  "keywords": [
+    "chemical",
+    "engineering",
+    "interactive",
+    "simultation"
+  ],
+  "author": "Author Name",
+  "license": "ISC",
+  "dependencies": {
+  }
+}

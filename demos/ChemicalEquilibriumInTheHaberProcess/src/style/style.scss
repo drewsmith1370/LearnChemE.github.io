@@ -1,0 +1,257 @@
+$modal-sm: calc(100vw - 50px);
+$modal-md: calc(100vw - 50px);
+$modal-lg: 820px;
+$modal-xl: 1140px;
+@import "bootstrap";
+@import "./slider.scss"; // Keeping slider styling in place if needed for other inputs
+:root {
+  --slider-width: 100px;
+  --value-width: 28px;
+  --unit-width: 22px;
+}
+
+#graphics-container {
+  position: relative;
+  margin: auto;
+  margin-top: 5px;
+  background-color: rgb(250, 250, 250);
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  width: min-content;
+}
+
+#p5-container {
+  position: relative;
+  margin: auto;
+  width: calc(100vw - 10px);
+  max-width: calc(calc(100vh - 10px) * 150 / 120);
+  height: calc(calc(100vw - 10px) * 120 / 150);
+  max-height: calc(100vh - 10px);
+}
+
+#sliders-wrapper {
+  position: absolute;
+  display: grid;
+  left: 50%;
+  top: 25px;
+  transform: translateX(-50%);
+  width: max-content;
+  height: max-content;
+  font-size: 0.7rem;
+  gap: 10px;
+}
+
+#sliders-top {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 10px;
+  justify-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+#sliders-bottom {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  gap: 10px;
+  justify-items: center;
+  justify-content: center;
+}
+
+.slider {
+  display: grid;
+  align-items: end;
+}
+
+.slider.with-units {
+  grid-template-columns: max-content var(--slider-width) var(--value-width) var(--unit-width);
+}
+
+.slider.without-units {
+  grid-template-columns: max-content var(--slider-width) var(--value-width);
+}
+
+.slider-label {
+  text-align: end;
+  margin-right: 10px;
+}
+
+input[type="range"] {
+  transform: translateY(2px);
+}
+
+.slider-value {
+  text-align: start;
+  padding-left: 2px;
+  margin: 0px 5px;
+}
+
+canvas {
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  box-shadow: 0px 0px 2px 2px lightgrey;
+}
+
+#eqn-container {
+  position: absolute;
+  left: 50%;
+  top: 17%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: 80px;
+  align-content: center;
+  align-items: center;
+}
+
+.modal.show {
+  padding-left: 0px !important;
+}
+
+.modal-body {
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.details-eqn {
+  width: min-content;
+  margin-left: 20px;
+}
+
+.details-txt {
+  line-height: 1.5rem;
+  margin-top: 15px;
+}
+
+#hamburger {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  width: max-content;
+  height: max-content;
+}
+
+#hamburger-icon {
+  display: grid;
+  align-content: center;
+  align-items: center;
+  height: max-content;
+  width: max-content;
+  cursor: pointer;
+  background-color: lightblue;
+  padding: 5px;
+  border: 1px solid black;
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+#hamburger-icon.active {
+  background-color: rgb(233, 164, 164);
+}
+
+#hamburger-icon:hover,
+#hamburger-icon.active:hover {
+  background-color: rgb(217, 239, 246);
+}
+
+#hamburger-icon>svg {
+  width: 20px;
+  height: 20px;
+}
+
+#buttons {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(1, max-content);
+  width: max-content;
+  top: 30px;
+  display: none;
+  justify-items: center;
+  margin-top: 10px;
+  gap: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 15px;
+  &>.btn {
+    width: 110px;
+  }
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  color: grey;
+}
+
+*[disabled="true"] {
+  opacity: 0.5 !important;
+  pointer-events: none;
+}
+
+@media screen and (min-width: 680px) {
+   :root {
+    --slider-width: 120px;
+    --value-width: 32px;
+    --unit-width: 25px;
+  }
+  #eqn-container {
+    font-size: 1.1rem;
+    top: 16%;
+  }
+  #sliders-wrapper {
+    font-size: 0.8rem;
+  }
+}
+
+@media screen and (min-width: 780px) {
+   :root {
+    --slider-width: 150px;
+    --value-width: 35px;
+    --unit-width: 28px;
+  }
+  #eqn-container {
+    font-size: 1.2rem;
+    top: 14%;
+  }
+  #sliders-wrapper {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (min-width: 900px) {
+   :root {
+    --slider-width: 180px;
+    --value-width: 36px;
+    --unit-width: 30px;
+  }
+  #sliders-wrapper {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 1320px) {
+   :root {
+    --slider-width: 200px;
+    --value-width: 40px;
+    --unit-width: 32px;
+  }
+  #hamburger-icon {
+    padding: 6px;
+  }
+  #hamburger-icon>svg {
+    width: 32px;
+    height: 32px;
+  }
+  #buttons {
+    top: 35px;
+    padding: 15px;
+  }
+  #sliders-wrapper {
+    font-size: 1.1rem;
+  }
+}

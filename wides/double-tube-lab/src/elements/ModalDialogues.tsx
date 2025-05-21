@@ -21,7 +21,7 @@ export const DirectionsModalDialogue = () => {
                 This digital lab, which represents a double pipe heat exchanger
                 with countercurrent flow, is designed to be used with this{" "}
                 <a
-                  href="./ME_DoublePipe-Worksheet_2020-2021_Final.pdf"
+                  href="./DoublePipe-Worksheet_2025.docx"
                   download
                 >
                   worksheet
@@ -30,7 +30,7 @@ export const DirectionsModalDialogue = () => {
                 then use the button at the top to start the pumps. To measure
                 temperatures, stop the pumps and press the "measure
                 temperatures" button, then hover your mouse over each beaker to
-                read the temperature.
+                read the temperature. To reset, select the “Reset beakers” button in the menu.
               </p>
               <h6>Single-beaker setup</h6>
               <p>
@@ -49,7 +49,7 @@ export const DirectionsModalDialogue = () => {
       case WORKSHEET:
         innerHtml = (
           <embed
-            src="./ME_DoublePipe-Worksheet_2020-2021_Final.pdf"
+            src="./DoublePipe-Worksheet_2025.pdf"
             width="100%"
             height="800px"
           />

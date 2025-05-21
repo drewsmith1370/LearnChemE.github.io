@@ -3,17 +3,23 @@ import { useState } from "react";
 interface controlProps {
   pumpsAreRunning: boolean;
   pumpBtnIsDisabled: boolean;
+  animationIsFinished: boolean;
+  showSwapBtn: boolean;
   pumpBtnHandler: () => void;
   measureBtnHandler: () => void;
   menuBtnHandler: () => void;
+  swapBtnHandler: () => void;
 }
 
 const Controls: React.FC<controlProps> = ({
   pumpsAreRunning,
   pumpBtnIsDisabled,
+  animationIsFinished,
+  showSwapBtn,
   pumpBtnHandler,
   measureBtnHandler,
   menuBtnHandler,
+  swapBtnHandler
 }) => {
   let pumpBtnClass: string, icon: string, innerHtml: string;
   if (pumpsAreRunning) {
@@ -62,7 +68,7 @@ const Controls: React.FC<controlProps> = ({
       </div>
       <div className="nav-bar">
         <div id="nav-bar-left">
-          <a href="./Shell-and-Tube-Worksheet-2022.pdf" download>
+          <a href="./Shell-and-Tube-Worksheet-2025.docx" download>
             <button className="btn btn-primary">
               <div>
                 <i className="fa-solid fa-download"></i>&nbsp;worksheet
@@ -93,6 +99,15 @@ const Controls: React.FC<controlProps> = ({
           >
             measure temperatures
           </button>
+          {showSwapBtn && <button
+            type="button"
+            className="btn btn-success"
+            disabled={pumpsAreRunning || !animationIsFinished}
+            aria-disabled={pumpsAreRunning}
+            onClick={() => swapBtnHandler()}
+          >
+            pour back
+          </button>}
         </div>
         <div id="nav-bar-right">
           <button

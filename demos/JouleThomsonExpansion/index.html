@@ -1,0 +1,213 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Update everything below THIS -->
+  <meta name="description" content="A simulation of Joule-Thomson expansion." />
+  <meta name="keywords"
+    content="simulation, engineering, interactive, joule, thomson, joule-thomson, expansion , thermodynamics" />
+  <meta name="author" content="Jackson Dunlap" />
+
+  <title>Joule Thomson Expansion</title>
+  <!-- and above THIS -->
+
+  <!-- MathJax Settings -->
+  <script>
+    MathJax = {
+      chtml: {
+        scale: 0.95,
+        mathmlSpacing: true, // true for MathML spacing rules, false for TeX rules
+        displayAlign: "left", // default for indentalign when set to 'auto'
+      },
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- p5.js -->
+  <script type="text/javascript" src="./js/p5.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style/style.css" />
+  <link rel="stylesheet" href="./style/slider.css" />
+
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="./style/bootstrap-custom.css" />
+  <script src="./js/bootstrap.min.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-204988035-3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "UA-204988035-3");
+  </script>
+</head>
+
+<body>
+  <!-- The controls-area is at the top of the simulation, and contains all buttons, sliders, and dropdowns -->
+  <div class="controls-area">
+    <div id="selection-row">
+      <div class="selection-row-wrapper" id="selection-wrapper">
+        <div class="btn-group" role="group" id="selection-type">
+          <input type="radio" class="btn-check" name="selection" id="r-constant-pressure" value="constant-pressure"
+            autocomplete="off" checked />
+          <label class="btn btn-outline-secondary btn-sm" style="color: black;"
+            for="r-constant-pressure">throtte</label>
+
+          <input type="radio" class="btn-check" name="selection" id="r-constant-volume" value="constant-volume"
+            autocomplete="off" />
+          <label class="btn btn-outline-secondary btn-sm" style="color: black;" for="r-constant-volume">J-T coeff. vs.
+            temperature</label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-buttons-row">
+      <div id="directions-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#directions-modal">
+        Directions</div>
+      <div id="details-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#details-modal">Details
+      </div>
+      <div id="about-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#about-modal">About</div>
+    </div>
+
+    <div class="buttons-row-wrapper" id="gas-buttons-wrapper" style="padding-top: 0px;">
+      <div class="btn-group-label">gas:</div>
+      <div class="btn-group" role="group" id="gas-type">
+        <input type="radio" class="btn-check" name="gas" id="r-NH3" value="NH3" autocomplete="off" checked />
+        <label class="btn btn-outline-success btn-sm" for="r-NH3">NH<sub>3</sub></label>
+
+        <input type="radio" class="btn-check" name="gas" id="r-CO2" value="CO2" autocomplete="off" />
+        <label class="btn btn-outline-success btn-sm" for="r-CO2">CO<sub>2</sub></label>
+
+        <input type="radio" class="btn-check" name="gas" id="r-N2" value="N2" autocomplete="off" />
+        <label class="btn btn-outline-success btn-sm" for="r-N2">N<sub>2</sub></label>
+
+        <input type="radio" class="btn-check" name="gas" id="r-H2" value="H2" autocomplete="off" />
+        <label class="btn btn-outline-success btn-sm" for="r-H2">H<sub>2</sub></label>
+
+      </div>
+    </div>
+
+    <div class="slider-wrapper" id="inlet-pressure-slider-wrapper" style="gap: 8px;">
+      <div class="data-name">inlet pressure (MPa):</div>
+      <input type="range" id="inlet-pressure-slider" min="1" max="5" step="1" value="3">
+      <div class="data-value" id="inlet-pressure-value">3</div>
+      <div class="data-metric"></div>
+    </div>
+
+    <div class="slider-wrapper" id="outlet-pressure-slider-wrapper">
+      <div class="data-name">outlet pressure (MPa):</div>
+      <input type="range" id="outlet-pressure-slider" min="0.01" max="0.1" step="0.01" value="0.05">
+      <div class="data-value" id="outlet-pressure-value">0.05</div>
+      <div class="data-metric"></div>
+    </div>
+
+    <div class="slider-wrapper" id="inlet-temperature-slider-wrapper" style="padding-bottom: 10px;">
+      <div class="data-name">inlet temperature (K): </div>
+      <input type="range" id="inlet-temperature-slider" min="50" max="750" step="5" value="500">
+      <div class="data-value" id="inlet-temperature-value">500</div>
+      <div class="data-metric"></div>
+    </div>
+  </div>
+
+  <div id="p5-container"></div>
+
+  <!--
+    Everything below here are modals, which are hidden by default. Any content
+    within the modals should be wrapped in a div with the class "modal-content".
+  -->
+  <div class="modal fade" id="directions-modal" tabindex="-1" role="dialog" aria-labelledby="directions-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="directions-modal-label">Directions</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            When a gas expands through an adiabatic throttle (often a porous plug), the temperature can change as a
+            result of the Joule-Thomson effect. Select one of four gases and use sliders to adjust the inlet
+            temperature, inlet pressure, and outlet pressure. The intensity of the red color is proportional to the
+            temperature, and the throttle is thicker for a larger pressure drop. Select "J-T coeff. vs. temperature" to
+            see the Joule-Thomson coefficient plotted as a function of temperature.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="details-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="details-modal-label">Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <p>The energy balance for an adiabatic throttle implies that</p>
+          <p>$$H_{out} = H_{in}.$$</p>
+          <p>The throttle does no work, and because the gas moves so quickly through the throttle, it does not have much
+            time to transfer heat to the surroundings. The Joule-Thomson coefficient is derived by starting with
+            the exact differential for enthalpy:</p>
+          <p>$$dH = \left(\frac{\delta H}{\delta P}\right)_T dP + \left(\frac{\delta H}{\delta T}\right)_P dT.$$</p>
+          <p>Since \(dH=0\) for a throttle, and the derivative of enthalpy \(H\) with respect to temperature \(T\) at
+            constant pressure \(P\) is the heat capacity \(C_p,\) then:</p>
+          <p>$$-\left(\frac{\delta H}{\delta P}\right)_T dP = C_pdT.$$</p>
+          <p>Rearranging, and given that the enthalpy \(H\) is constant,</p>
+          <p>$$-\left(\frac{\delta H}{\delta P}\right)_T = C_p \left(\frac{\delta T}{\delta P}\right)_{H}, $$</p>
+          <p>where \(\left(\frac{\delta T}{\delta P}\right)_H = \mu_{JT},\) and \(\mu_{JT}\) is the Joule-Thomson
+            coefficient. Integration then relates the output temperature to the inlet temperature and the pressure drop:
+          </p>
+          <p>$$T_{out} = T_{in} + \mu_{JT}(P_{out}-P_{in}).$$</p>
+          <p>If \(\mu_{JT}\) > \(0,\) the outlet temperature is lower than the inlet temperature. If \(\mu_{JT}\) < \(
+              0,\) then the outlet tmperature is higher.</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="about-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="about-modal-label">About</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            This simulation was created in the
+            <a href="https://www.colorado.edu/chbe" target="_blank">Department of Chemical and Biological
+              Engineering</a>, at University of Colorado Boulder for
+            <a href="http://www.learncheme.com" target="_blank">LearnChemE.com</a> by Jackson Dunlap under the direction
+            of Professor John L. Falconer and Michelle Medlin, with the assistance of Neil Hendren and Drew Smith. It is
+            a JavaScript/HTML5 implementation
+            of a
+            <a href="https://demonstrations.wolfram.com/JouleThomsonExpansion/" target="_blank">Mathematica
+              simulation</a> by Adam J. Johnston and Rachael L. Baumann. It was prepared with
+            financial support from the
+            National Science Foundation (DUE 2336987 and 2336988) in collaboration with Washington State University.
+            Address any questions or comments to LearnChemE@gmail.com. If this simulation is too big or too small for
+            your screen, zoom out or in using command - or command + on Mac or ctrl - or ctrl + on Windows.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>

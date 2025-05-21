@@ -1,0 +1,235 @@
+$modal-sm: calc(100vw - 50px);
+$modal-md: calc(100vw - 50px);
+$modal-lg: 820px;
+$modal-xl: 1140px;
+@import "bootstrap";
+@import "./slider.scss"; // Keeping slider styling in place if needed for other inputs
+#graphics-container {
+  position: relative;
+  margin: auto;
+  margin-top: 5px;
+  background-color: rgb(250, 250, 250);
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  width: min-content;
+}
+
+#p5-container {
+  position: relative;
+  margin: auto;
+  width: calc(100vw - 10px);
+  max-width: calc(calc(100vh - 10px) * 150 / 118);
+  height: calc(calc(100vw - 10px) * 118 / 150);
+  max-height: calc(100vh - 10px);
+}
+
+canvas {
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
+  box-shadow: 0px 0px 2px 2px lightgrey;
+}
+
+#inject-sample {
+  position: absolute;
+  top: 2%;
+  left: 12%;
+  display: none;
+}
+
+#take-sample {
+  position: absolute;
+  bottom: 3%;
+  right: 3%;
+  width: max-content;
+  height: max-content;
+}
+
+#fill-tank {
+  position: absolute;
+  top: 2%;
+  left: 10%;
+}
+
+#empty-tank {
+  position: absolute;
+  top: 2%;
+  left: calc(10% + 90px);
+}
+
+#fill-tank.clicked,
+#empty-tank.clicked,
+#take-sample.clicked,
+#inject-sample.clicked {
+  opacity: 0.7;
+}
+
+.modal.show {
+  padding-left: 0px !important;
+}
+
+.modal-body {
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+#hamburger {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  width: max-content;
+  height: max-content;
+}
+
+#hamburger-icon {
+  display: grid;
+  align-content: center;
+  align-items: center;
+  height: max-content;
+  width: max-content;
+  cursor: pointer;
+  background-color: lightblue;
+  padding: 5px;
+  border: 1px solid black;
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+#hamburger-icon.active {
+  background-color: rgb(233, 164, 164);
+}
+
+#hamburger-icon:hover,
+#hamburger-icon.active:hover {
+  background-color: rgb(217, 239, 246);
+}
+
+#hamburger-icon>svg {
+  width: 20px;
+  height: 20px;
+}
+
+#buttons {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(3, max-content);
+  width: max-content;
+  top: 30px;
+  display: none;
+  justify-items: center;
+  margin-top: 20px;
+  gap: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 25px;
+  &>.btn {
+    width: 110px;
+  }
+}
+
+#buttons>div:nth-child(1) {
+  justify-self: end;
+}
+
+#buttons>div:nth-child(2) {
+  justify-self: center;
+}
+
+#buttons>a:nth-child(3) {
+  justify-self: start;
+}
+
+#controls-active-label {
+  grid-column: 1 / 4;
+  margin-top: 20px;
+}
+
+.slider-container {
+  display: grid;
+  grid-template-columns: max-content 180px 40px;
+  grid-column: 1 / 4;
+  gap: 10px;
+  align-items: end;
+  margin-top: 10px;
+}
+
+.dropdown-container {
+  display: grid;
+  grid-template-columns: max-content 200px;
+  gap: 10px;
+  grid-column: 1 / 4;
+  // justify-self: start;
+  margin-top: 15px;
+}
+
+.dropdown-label {
+  justify-self: end;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  color: grey;
+}
+
+*[disabled="true"] {
+  opacity: 0.5 !important;
+  pointer-events: none;
+}
+
+@media screen and (min-width: 1080px) {}
+
+@media screen and (min-width: 1320px) {
+  #hamburger-icon {
+    padding: 6px;
+  }
+  #hamburger-icon>svg {
+    width: 32px;
+    height: 32px;
+  }
+  #buttons {
+    top: 35px;
+    padding: 15px;
+  }
+}
+
+#antoine-table {
+  grid-column: 1 / 4;
+  margin-bottom: 20px;
+}
+
+#antoine-table table {
+  outline: 1px solid black;
+}
+
+#antoine-table table th {
+  background-color: lightblue;
+  text-align: center;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#antoine-table table td {
+  text-align: center;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+#antoine-table table td:first-child {
+  width: 120px;
+}
+
+.table-label {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 8px;
+  margin-top: 15px;
+}

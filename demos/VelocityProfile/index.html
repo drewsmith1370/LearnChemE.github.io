@@ -1,0 +1,214 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Update everything below THIS -->
+  <meta name="description" content="A simulation of three immiscible, incompressible fluids in laminar flow. The fluids are layered vertically and subjected to steady-state Couette flow.">
+  <meta name="keywords" content="simulation, engineering, interactive">
+  <meta name="author" content="Jackson Dunlap">
+
+  <title>Velocity Profile</title>
+  <!-- and above THIS -->
+
+  <!-- MathJax Settings -->
+  <script>
+    MathJax = {
+      chtml: {
+        scale: 0.95,
+        mathmlSpacing: true, // true for MathML spacing rules, false for TeX rules
+        displayAlign: 'left', // default for indentalign when set to 'auto'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- p5.js -->
+  <script type="text/javascript" src="./js/p5.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./style/style.css">
+  <link rel="stylesheet" href="./style/slider.css">
+
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="./style/bootstrap-custom.css">
+  <script src="./js/bootstrap.min.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-204988035-3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-204988035-3');
+  </script>
+</head>
+
+<body>
+  <div class="controls-area">
+    <div class="inputs">
+      <div class="input-area" id="display-selection">
+        <div id="selection-row">display:</div>
+
+        <select id="selection">
+          <option value="velocity-distribution">velocity distribution</option>
+          <option value="velocity-vs-height">velocity vs height</option>
+        </select>
+      </div>
+
+      <div class="input-area" id="sliders-area-1">
+        <div class="data-name"><b>fluid height:</b> <span style="color:rgb(137, 63, 145);">\(h_3\) (top)</span></div>
+        <input type="range" id="height-slider-3" min="0.01" max="0.66" step="0.01" value="0.27">
+        <div class="data-value" id="height-value3">0.27</div>
+        <div class="data-metric"></div>
+
+        <div class="data-name"><b>viscosities:</b> <span style="color:rgb(137, 63, 145);">\(\mu_3\) (top)</span></div>
+        <input type="range" id="visco-slider-3" min="0.1" max="10" step="0.01" value="0.5">
+        <div class="data-value" id="visco-value3">0.50</div>
+        <div class="data-metric"></div>
+      </div>
+    </div>
+
+
+    <div class="modal-buttons-row">
+      <div id="directions-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#directions-modal">Directions</div>
+      <div id="details-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#details-modal">Details</div>
+      <div id="about-button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#about-modal">About</div>
+
+      <div class="input-area" id="sliders-area-2">
+        <div class="data-name"><span style="color:rgb(46, 194, 6);">\(h_2\) (middle)</span></div>
+        <input type="range" id="height-slider2" min="0.01" max="0.72" step="0.01" value="0.33">
+        <div class="data-value" id="height-value2">0.33</div>
+        <div class="data-metric"></div>
+
+        <div class="data-name"><span style="color:rgb(46, 194, 6);">\(\mu_2\) (middle)</span></div>
+        <input type="range" id="visco-slider-2" min="0.1" max="10" step="0.01" value="1">
+        <div class="data-value" id="visco-value2">1.00</div>
+        <div class="data-metric"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="p5-container"></div>
+
+  <div class="modal fade" id="directions-modal" tabindex="-1" role="dialog" aria-labelledby="directions-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="directions-modal-label">Directions</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            This simulation shows the behavior of three immiscible, incompressible fluids in laminar flow. The fluids are layered vertically and subjected to steady-state Couette flow; the top plate moves to the right at a constant velocity, and the bottom plate
+            is stationary. At each height, the black arrow is proportional to the velocity of the fluid at that height. You can change the viscosities and heights of fluids 2 and 3 with sliders. The velocity distribution shows the impact of fluid viscosity
+            on the fluid's velocity gradient. The velocity versus height plot indicates the relative slopes (or velocity gradients) in each fluid. All numbers are dimensionless.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="details-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="details-modal-label">Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <p>
+            Couette flow is fluid flow through parallel plates where one plate is stationary and the other is moving at a constant velocity. In this Demonstration, the flow is at steady-state and fully developed. The Navier-Stokes equations in the \(x\) and \(y\)
+            directions are used:
+          </p>
+
+          <p>
+            $$ \rho g_x - \frac{\partial P}{\partial x} + \mu \left(\frac{\partial^{2} u_x}{\partial x^{2}} + \frac{\partial^{2} u_x}{\partial y^{2}} + \frac{\partial^{2} u_x}{\partial z^{2}}\right) = \rho \left(\frac{\partial u_x}{\partial t} + u_x \frac{\partial
+            u_x}{\partial x} + u_y \frac{\partial u_x}{\partial y} + u_z \frac{\partial u_x}{\partial z}\right), $$ $$ \rho g_y - \frac{\partial P}{\partial y} + \mu \left(\frac{\partial^{2} u_y}{\partial x^{2}} + \frac{\partial^{2} u_y}{\partial y^{2}}
+            + \frac{\partial^{2} u_y}{\partial z^{2}}\right) = \rho \left(\frac{\partial u_y}{\partial t} + u_x \frac{\partial u_y}{\partial x} + u_y \frac{\partial u_y}{\partial y} + u_z \frac{\partial u_y}{\partial z}\right). $$
+          </p>
+
+          <p>
+            Since flow is steady-state and there is no flow in the \(z\) direction, these equations simplify to:
+          </p>
+
+          <p>
+            $$ \rho g_x - \frac{\partial P}{\partial x} + \mu \left(\frac{\partial^{2} u_x}{\partial x^{2}} + \frac{\partial^{2} u_x}{\partial y^{2}}\right) = \rho \left(u_x \frac{\partial u_x}{\partial x} + u_y \frac{\partial u_x}{\partial y}\right), $$ $$ \rho
+            g_y - \frac{\partial P}{\partial y} + \mu \left(\frac{\partial^{2} u_y}{\partial x^{2}} + \frac{\partial^{2} u_y}{\partial y^{2}}\right) = \rho \left(u_x \frac{\partial u_y}{\partial x} + u_y \frac{\partial u_y}{\partial y}\right). $$
+          </p>
+
+          <p>
+            Flow is in the \(x\) direction, so \(u_y\) drops out:
+          </p>
+
+          <p>
+            $$ \rho g_x - \frac{\partial P}{\partial x} + \mu \left(\frac{\partial^{2} u_x}{\partial x^{2}} + \frac{\partial^{2} u_x}{\partial y^{2}}\right) = \rho u_x \frac{\partial u_x}{\partial x}, $$ $$ \rho g_y - \frac{\partial P}{\partial y} = 0. $$
+          </p>
+
+          <p>
+            Since the flow is fully developed the velocity in the direction of flow does not change. It is assumed that the pressure is hydrostatic so pressure does not vary in the \(x\) direction:
+          </p>
+
+          <p>
+            $$ \mu \frac{\partial^2 u_x}{\partial y^2} = 0, $$ $$ \rho g_y = \frac{\partial P}{\partial y}. $$
+          </p>
+
+          <p>
+            For the boundary conditions \( u_x = 0 \) at \( y = 0 \) and \(u_x = U\) at \( y = H \), the simplified Navier-Stokes eqation is:
+          </p>
+
+          <p>
+            $$ u_x = \frac{U}{H} y, $$
+          </p>
+
+          <p>
+            where \(\rho\) is density, \(g\) is gravity, \(P\) is pressure, \(\mu\) is viscosity, \(u\) is fluid velocity, \(U\) is plate velocity, \(t\) is time, and \(H\) is the distance between plates.
+          </p>
+
+          <p>
+            Reference
+          </p>
+          <p>
+            <ol class="references">
+              <li>
+                B. R. Munson, T. H. Okiishi, and W. W. Huebsch, Fundamentals of Fluid Mechanics, 6th ed., Hoboken, NJ: John Wiley & Sons, 2010.
+              </li>
+            </ol>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="about-modal" tabindex="-1" role="dialog" aria-labelledby="about-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="about-modal-label">About</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            This simulation was created in the <a href="https://www.colorado.edu/chbe" target="_blank">Department of
+            Chemical and Biological Engineering</a>, at University of Colorado Boulder for <a href="http://www.learncheme.com" target="_blank">LearnChemE.com</a> by Jackson Dunlap under the direction of Professor John L. Falconer and Michelle Medlin,
+            with the assistance of Neil Hendren and Drew Smith. It is a JavaScript/HTML5 implementation of a Mathematica simulation by Duncan Chadly, Michael Wrobel, Terra Salamida, and Rachael L. Baumann. It can be downloaded
+            <a href="https://learncheme.com/wp-content/uploads/simulation-files/downloads/velocity-profile-for-immiscible-viscous-fluids.cdf">here</a>. It was prepared with financial support from the National Science Foundation (DUE 2336987 and 2336988).
+            Address any questions or comments to LearnChemE@gmail.com.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/main.js"></script>
+</body>
+
+</html>
